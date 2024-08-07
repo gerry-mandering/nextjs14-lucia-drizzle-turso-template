@@ -6,10 +6,11 @@ import { getUserByEmail } from "@/auth/repository/user";
 import { generateEmailVerificationToken } from "../repository/email-verification-token";
 import { sendVerificationEmail } from "@/lib/mail";
 import { getAccountByUserId } from "@/auth/repository/account";
-import { accountType } from "@/db/schema";
+import { AccountType } from "@/db/schema";
 import { verify } from "argon2";
 import { setSession } from "@/auth/common/session";
 import { redirect } from "next/navigation";
+import { EmailAlreadyRegisteredError, LoginError } from "@/lib/errors";
 
 export const signInAction = createServerAction()
   .input(
@@ -21,7 +22,7 @@ export const signInAction = createServerAction()
   .handler(async ({ input: { email, password } }) => {
     const existingUser = await getUserByEmail(email);
     if (!existingUser) {
-      throw new Error("Incorrect email or password");
+      throw new LoginError();
     }
 
     if (!existingUser.emailVerified) {
@@ -42,18 +43,16 @@ export const signInAction = createServerAction()
     }
 
     const existingAccount = await getAccountByUserId(existingUser.id);
-    if (existingAccount.accountType !== accountType.enum.credentials) {
-      throw new Error(
-        "This email is already registered with an OAuth provider",
-      );
+    if (existingAccount.accountType !== AccountType.enum.credentials) {
+      throw new EmailAlreadyRegisteredError();
     }
 
     const isPasswordValid = await verify(existingUser.password!, password);
     if (!isPasswordValid) {
-      throw new Error("Incorrect email or password");
+      throw new LoginError();
     }
 
     await setSession(existingUser.id);
 
-    return redirect("/");
+    return redirect("/dashboard");
   });

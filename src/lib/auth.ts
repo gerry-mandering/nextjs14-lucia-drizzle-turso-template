@@ -2,7 +2,7 @@ import { Lucia } from "lucia";
 import { DrizzleSQLiteAdapter } from "@lucia-auth/adapter-drizzle";
 import { db } from "@/db";
 import { cookies } from "next/headers";
-import { sessions, users } from "@/db/schema";
+import { sessions, users, Role } from "@/db/schema";
 import { env } from "@/env";
 
 import type { User, Session } from "lucia";
@@ -24,6 +24,7 @@ export const lucia = new Lucia(adapter, {
       id: attributes.id,
       displayName: attributes.displayName,
       image: attributes.image,
+      role: attributes.role,
     };
   },
 });
@@ -76,6 +77,7 @@ interface DatabaseUserAttributes {
   id: string;
   displayName: string;
   image: string | null;
+  role: typeof Role.Enum.admin | typeof Role.Enum.user;
 }
 
 export const github = new GitHub(

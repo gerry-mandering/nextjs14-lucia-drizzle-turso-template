@@ -27,8 +27,6 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
     await signOut();
   };
 
-  console.log(stringWidth(user.displayName));
-
   return (
     <DropdownMenu>
       {/* Dropdown trigger */}

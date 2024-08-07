@@ -67,5 +67,6 @@ export const sessions = sqliteTable("sessions", {
   expiresAt: integer("expires_at").notNull(),
 });
 
-export const accountType = z.enum(accountTypeEnum);
-export const provider = z.enum(providerEnum);
+export const Role = z.enum(roleEnum);
+export const AccountType = z.enum(accountTypeEnum);
+export const Provider = z.enum(providerEnum);

@@ -7,6 +7,7 @@ import { createUser, getUserByEmail } from "@/auth/repository/user";
 import { createAccount } from "@/auth/repository/account";
 import { generateEmailVerificationToken } from "@/auth/repository/email-verification-token";
 import { sendVerificationEmail } from "@/lib/mail";
+import { EmailAlreadyRegisteredError } from "@/lib/errors";
 
 export const signUpAction = createServerAction()
   .input(
@@ -19,7 +20,7 @@ export const signUpAction = createServerAction()
   .handler(async ({ input: { displayName, email, password } }) => {
     const existingUser = await getUserByEmail(email);
     if (existingUser) {
-      throw new Error("Email already exists");
+      throw new EmailAlreadyRegisteredError();
     }
 
     // create new user

@@ -1,11 +1,11 @@
 import { db } from "@/db";
 import { eq, and } from "drizzle-orm";
-import { accounts, accountType, provider } from "@/db/schema";
+import { accounts, AccountType, Provider } from "@/db/schema";
 
 export async function createAccount(userId: string) {
   await db.insert(accounts).values({
     userId,
-    accountType: accountType.enum.credentials,
+    accountType: AccountType.enum.credentials,
   });
 }
 
@@ -15,8 +15,8 @@ export async function createAccountViaGithub(
 ) {
   await db.insert(accounts).values({
     userId,
-    accountType: accountType.enum.oauth,
-    provider: provider.enum.github,
+    accountType: AccountType.enum.oauth,
+    provider: Provider.enum.github,
     providerAccountId: providerAccountId,
   });
 }
@@ -27,8 +27,8 @@ export async function createAccountViaGoogle(
 ) {
   await db.insert(accounts).values({
     userId,
-    accountType: accountType.enum.oauth,
-    provider: provider.enum.google,
+    accountType: AccountType.enum.oauth,
+    provider: Provider.enum.google,
     providerAccountId: providerAccountId,
   });
 }
@@ -48,7 +48,7 @@ export async function getAccountByGithubId(githubId: string) {
     .from(accounts)
     .where(
       and(
-        eq(accounts.provider, provider.enum.github),
+        eq(accounts.provider, Provider.enum.github),
         eq(accounts.providerAccountId, githubId),
       ),
     );
@@ -62,7 +62,7 @@ export async function getAccountByGoogleId(googleId: string) {
     .from(accounts)
     .where(
       and(
-        eq(accounts.provider, provider.enum.google),
+        eq(accounts.provider, Provider.enum.google),
         eq(accounts.providerAccountId, googleId),
       ),
     );

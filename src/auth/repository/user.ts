@@ -72,8 +72,6 @@ export async function createUserViaGoogle(
 }
 
 export async function markUserEmailAsVerified(userId: string) {
-  console.log("Marking user email as verified");
-
   await db
     .update(users)
     .set({ emailVerified: new Date() })

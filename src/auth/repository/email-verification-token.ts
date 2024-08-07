@@ -51,7 +51,6 @@ export async function getEmailVerificationTokenByToken(token: string) {
 }
 
 export async function deleteEmailVerificationTokenById(id: string) {
-  console.log("Deleting email verification token");
   await db
     .delete(emailVerificationTokens)
     .where(eq(emailVerificationTokens.id, id));

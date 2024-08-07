@@ -1,7 +1,7 @@
 import { createServerActionProcedure } from "zsa";
 
 import { PublicError } from "@/lib/errors";
-import { isAuthenticated } from "@/auth/common/user";
+import { isAdmin, isAuthenticated } from "@/auth/common/user";
 
 function shapeErrors({ err }: any) {
   const isAllowedError = err instanceof PublicError;
@@ -25,5 +25,12 @@ export const isAuthenticatedProcedure = createServerActionProcedure()
   .experimental_shapeError(shapeErrors)
   .handler(async () => {
     const user = await isAuthenticated();
+    return { user };
+  });
+
+export const isAdminProcedure = createServerActionProcedure()
+  .experimental_shapeError(shapeErrors)
+  .handler(async () => {
+    const user = await isAdmin();
     return { user };
   });
