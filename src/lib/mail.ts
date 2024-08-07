@@ -1,7 +1,9 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-const domain = process.env.NEXT_PUBLIC_APP_URL;
+import { env } from "@/env";
+
+const resend = new Resend(env.RESEND_API_KEY);
+const domain = env.APP_URL;
 
 export async function sendVerificationEmail(email: string, token: string) {
   const confimLink = `${domain}/email-verification?token=${token}`;

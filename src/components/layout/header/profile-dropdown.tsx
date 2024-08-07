@@ -56,7 +56,7 @@ export function ProfileDropdown({ user }: ProfileDropdownProps) {
 
       {/* Dropdown content */}
       <DropdownMenuContent
-        className={cn("w-36", {
+        className={cn("w-40", {
           "w-48": stringWidth(user.displayName) > 10,
           "w-56": stringWidth(user.displayName) > 13,
         })}

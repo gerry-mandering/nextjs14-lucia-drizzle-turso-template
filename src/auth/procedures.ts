@@ -1,11 +1,12 @@
 import { createServerActionProcedure } from "zsa";
 
+import { env } from "@/env";
 import { PublicError } from "@/lib/errors";
 import { isAdmin, isAuthenticated } from "@/auth/common/user";
 
 function shapeErrors({ err }: any) {
   const isAllowedError = err instanceof PublicError;
-  const isDev = process.env.NODE_ENV === "development";
+  const isDev = env.NODE_ENV === "development";
 
   if (isAllowedError || isDev) {
     console.error(err);
